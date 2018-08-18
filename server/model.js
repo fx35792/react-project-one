@@ -17,14 +17,15 @@ const models = {
         //如果是boss 还有两个字段 company,money
         'company': {'type': String},
         'money': {'type': String}
-    }
+    },
+    chart: {}
 };
 
 for (let m in models) {
     mongoose.model(m, new mongoose.Schema(models[m]))
 }
 
-module.export = {
+module.exports = {
     getModel: function (name) {
         return mongoose.model(name)
     }
