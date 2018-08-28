@@ -1,8 +1,15 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
+import {loadData} from '../../store/user.redux';
+
 
 @withRouter
+@connect(
+    null,
+    {loadData}
+)
 class AuthRoute extends Component {
     componentDidMount() {
         const publicList = ['/login', '/register'];
@@ -13,12 +20,14 @@ class AuthRoute extends Component {
 
         axios.get('/user/info')
             .then((res) => {
-                console.log(res.data.code)
                 //0:登录 1:未登录
-                if (res.data.code === 0) {
-                    console.log(11)
-                } else {
-                    this.props.history.push('/login');
+                if (res.status === 200) {
+                    if (res.data.code === 0) {
+                        console.log('登录成功');
+                        this.props.loadData(res.data.data);
+                    } else {
+                        this.props.history.push('/login');
+                    }
                 }
             })
             .catch(() => {
@@ -27,9 +36,7 @@ class AuthRoute extends Component {
     }
 
     render() {
-        return (
-            <div></div>
-        )
+        return (<div></div>)
     }
 }
 

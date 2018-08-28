@@ -6,6 +6,8 @@ import store from './store';
 import AuthRoute from './components/authRoute';
 import Login from './contianer/login';
 import Register from './contianer/register';
+import BossInfo from './contianer/BossInfo';
+import GeniusInfo from './contianer/GeniusInfo';
 
 class App extends Component {
     render() {
@@ -14,6 +16,8 @@ class App extends Component {
                 <BrowserRouter>
                     <div>
                         <AuthRoute></AuthRoute>
+                        <Route path='/geniusInfo' exact component={GeniusInfo}></Route>
+                        <Route path='/bossInfo' exact component={BossInfo}></Route>
                         <Route path='/login' exact component={Login}></Route>
                         <Route path='/register' exact component={Register}></Route>
                     </div>
