@@ -5,17 +5,11 @@ import {NavBar} from 'antd-mobile';
 
 import NavLinkBar from '../../components/NavLinkBar'
 import Boss from '../../components/Boss';
-
-function Genius() {
-    return <h2>Genius列表</h2>
-}
+import Genius from '../../components/Genius';
+import User from '../../components/User';
 
 function Msg() {
     return <div>信息列表</div>
-}
-
-function User() {
-    return <div>个人中心</div>
 }
 
 @connect(

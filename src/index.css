@@ -2,14 +2,18 @@
     position: fixed;
     top: 0;
     width: 100%;
+    z-index: 0;
 }
 
 .am-tab-bar {
     position: fixed;
     bottom: 0;
     width: 100%;
+    z-index: 0;
 }
 
 .page-content {
     padding: 45px 0;
+    position: relative;
+    z-index: 1;
 }
