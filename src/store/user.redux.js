@@ -1,5 +1,4 @@
 import axios from 'axios';
-import utils from 'utility';
 import {getRedirectPath} from "../utils/utils";
 
 const AUTH_SUCCESS = 'AUTH_SUCCESS';
@@ -56,11 +55,6 @@ function errorMsg(msg) {
     }
 }
 
-function md5Pwd(pwd) {
-    const salt = '123_hello_WORLD_!@#$%';
-    return utils.md5(utils.md5(pwd + salt));
-}
-
 export function register({user, pwd, repeatpwd, type}) {
     if (!user || !pwd || !type) {
         return errorMsg('用户名密码必须输入')
@@ -70,7 +64,7 @@ export function register({user, pwd, repeatpwd, type}) {
     }
 
     return dispatch => {
-        axios.post('/user/register', {user, type, pwd: md5Pwd(pwd)})
+        axios.post('/user/register', {user, type, pwd})
             .then((res) => {
                 if (res.status === 200 && res.data.code === 0) {
                     dispatch(authSuccess({user, pwd, type}))
@@ -88,7 +82,6 @@ export function login({user, pwd}) {
     if (!user || !pwd) {
         return errorMsg('用户名密码必须输入')
     }
-
     return dispatch => {
         axios.post('/user/login', {user, pwd})
             .then((res) => {

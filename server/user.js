@@ -13,9 +13,38 @@ function md5Pwd(pwd) {
 
 Router.get('/list', function (req, res) {
     // User.remove({},function(e,d){});
-    User.find({}, function (err, doc) {
-        return res.json(doc)
+    const {type} = req.query;
+    User.find({type}, function (err, doc) {
+        return res.json({code: 0, data: doc})
     });
+});
+
+Router.post('/update', function (req, res) {
+    const userId = req.cookies.userId;
+    if (!userId) {
+        return json.dumps({code: 1})
+    }
+    const body = req.body;
+    User.findByIdAndUpdate(userId, body, function (err, doc) {
+        const data = Object.assign({}, {
+            user: doc.user,
+            type: doc.type
+        }, body);
+        return res.json({code: 0, data});
+    })
+});
+
+Router.post('/login', function (req, res) {
+    const {user, pwd} = req.body;
+    console.log('user',user);
+    console.log('pwd',pwd);
+    User.findOne({user, pwd: md5Pwd(pwd)}, _filter, function (err, doc) {
+        if (!doc) {
+            return res.json({code: 1, msg: '用户名或者密码错误'})
+        }
+        res.cookie('userId', doc._id);
+        return res.json({code: 0, data: doc})
+    })
 });
 
 Router.post('/register', function (req, res) {
@@ -37,33 +66,6 @@ Router.post('/register', function (req, res) {
         }
     )
 });
-
-Router.post('/login', function (req, res) {
-    const {user, pwd} = req.body;
-    User.findOne({user, pwd: md5Pwd(pwd)}, _filter, function (err, doc) {
-        if (!doc) {
-            return res.json({code: 1, msg: '用户名或者密码错误'})
-        }
-        res.cookie('userId', doc._id);
-        return res.json({code: 0, data: doc})
-    })
-});
-
-Router.post('/update', function (req, res) {
-    const userId = req.cookies.userId;
-    if (!userId) {
-        return json.dumps({code: 1})
-    }
-    const body = req.body;
-    User.findByIdAndUpdate(userId, body, function (err, doc) {
-        const data = Object.assign({}, {
-            user: doc.user,
-            type: doc.type
-        }, body);
-        return res.json({code: 0, data});
-    })
-});
-
 
 Router.get('/info', function (req, res) {
     const {userId} = req.cookies;
